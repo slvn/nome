@@ -10,15 +10,22 @@
         android:icon="@drawable/ic_launcher"
         android:persistent="true">
 
-        <activity android:name="Home"
+        <activity android:name=".Home"
+            android:theme="@style/AppTheme"
             android:launchMode="singleInstance"
+            android:clearTaskOnLaunch="true"
             android:stateNotNeeded="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.HOME"/>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+        </activity>
+
+        <activity android:name=".Drawer"
+            android:theme="@style/AppTheme"
+            android:launchMode="singleInstance"
+            android:stateNotNeeded="true">
         </activity>
 
     </application>
