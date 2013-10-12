@@ -10,6 +10,9 @@
     android:horizontalSpacing="5dp"
     android:stretchMode="spacingWidthUniform"
     android:gravity="center"
+    android:clipToPadding="false"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
 >
 
 </GridView>
