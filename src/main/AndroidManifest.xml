@@ -13,7 +13,9 @@
         <activity android:name=".Drawer"
             android:theme="@style/AppTheme"
             android:launchMode="singleInstance"
-            android:stateNotNeeded="true">
+            android:stateNotNeeded="true"
+            android:excludeFromRecents="true"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.HOME"/>
