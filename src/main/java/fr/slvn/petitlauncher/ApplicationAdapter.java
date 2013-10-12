@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -15,6 +16,8 @@ import android.widget.ImageView;
 import java.util.List;
 
 public class ApplicationAdapter extends BaseAdapter {
+
+    private static final String TAG = "ApplicationAdapter";
 
     private Context context;
     private List<ResolveInfo> resolveInfos;
@@ -57,17 +60,14 @@ public class ApplicationAdapter extends BaseAdapter {
     }
 
     public Drawable getIcon(ResolveInfo info) {
-        Resources resources;
         try {
-            resources = context.getPackageManager().getResourcesForApplication(info.activityInfo.applicationInfo);
-        } catch (PackageManager.NameNotFoundException e) {
-            resources = null;
-        }
-        if (resources != null) {
+            Resources resources = context.getPackageManager().getResourcesForApplication(info.activityInfo.applicationInfo);
             int iconId = info.getIconResource();
             if (iconId != 0) {
                 return resources.getDrawable(iconId);
             }
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(TAG, "Cannot find package for " + info, e);
         }
         return null;
     }
