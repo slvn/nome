@@ -10,7 +10,7 @@ import android.widget.GridView;
 
 public class Drawer extends Activity {
 
-    private static final String TAG = "Home";
+    private static final String TAG = "Drawer";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,10 +27,7 @@ public class Drawer extends Activity {
                 Intent intent = new Intent();
                 intent.setClassName(info.activityInfo.applicationInfo.packageName, info.activityInfo.name);
                 startActivity(intent);
-                finish();
             }
         });
-
     }
-
 }
