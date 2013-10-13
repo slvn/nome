@@ -12,6 +12,7 @@
 
         <activity android:name=".Drawer"
             android:theme="@style/AppTheme"
+            android:taskAffinity=""
             android:launchMode="singleInstance"
             android:stateNotNeeded="true"
             android:excludeFromRecents="true"
