@@ -2,8 +2,6 @@
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo.Wallpaper">
-        <!-- <item name="android:windowBackground">@android:color/black</item> -->
-        <!-- <item name="android:windowNoTitle">true</item> -->
     </style>
 
 </resources>
