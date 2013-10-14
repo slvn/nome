@@ -4,7 +4,7 @@
     android:id="@+id/drawer"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:columnWidth="@android:dimen/app_icon_size"
+    android:columnWidth="@dimen/app_icon_size"
     android:numColumns="auto_fit"
     android:verticalSpacing="5dp"
     android:horizontalSpacing="5dp"

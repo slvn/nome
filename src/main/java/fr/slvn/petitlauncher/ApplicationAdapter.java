@@ -21,12 +21,14 @@ public class ApplicationAdapter extends BaseAdapter {
 
     private Context context;
     private List<ResolveInfo> resolveInfos;
+    private int appIconsize;
 
     public ApplicationAdapter(Context context) {
         this.context = context;
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         resolveInfos = context.getPackageManager().queryIntentActivities(intent, 0);
+        appIconsize = (int) context.getResources().getDimension(R.dimen.app_icon_size);
     }
 
     @Override
@@ -49,8 +51,8 @@ public class ApplicationAdapter extends BaseAdapter {
         ImageView imageView;
         if (convertView == null) {
             imageView = new ImageView(context);
-            imageView.setLayoutParams(new GridView.LayoutParams(96, 96));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setLayoutParams(new GridView.LayoutParams(appIconsize, appIconsize));
+            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         } else {
             imageView = (ImageView) convertView;
         }
