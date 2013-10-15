@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="fr.slvn.petitlauncher"
-    android:versionCode="1"
-    android:versionName="0.1b">
+    android:versionCode="2"
+    android:versionName="0.2b">
 
     <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="18" />
 
