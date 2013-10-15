@@ -1,8 +1,10 @@
 package fr.slvn.petitlauncher;
 
 import android.app.Activity;
+import android.app.ActionBar;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -40,6 +42,8 @@ public class Drawer extends Activity {
         if (showWallPaper) {
             gridView.setBackground(null);
         } else {
+            ActionBar bar = getActionBar();
+            bar.setBackgroundDrawable(new ColorDrawable(0xFF000000));
             gridView.setBackgroundResource(android.R.color.background_dark);
         }
     }
