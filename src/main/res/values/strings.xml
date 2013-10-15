@@ -1,3 +1,9 @@
 <resources>
+
     <string name="app_name">Petit Launcher</string>
+    <string name="drawer_action_settings">Settings</string>
+    <string name="preference_showWallpaper_title">Show wallpaper</string>
+    <string name="preference_showWallpaper_summaryOn">The wallpaper is visible</string>
+    <string name="preference_showWallpaper_summaryOff">The wallpaper is not visible</string>
+
 </resources>
