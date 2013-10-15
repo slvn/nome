@@ -12,6 +12,10 @@ repositories {
     mavenCentral()
 }
 
+dependencies {
+    compile files("libs/picasso-2.1.2-SNAPSHOT.jar")
+}
+
 android {
     compileSdkVersion 17
     buildToolsVersion "17.0.0"
@@ -20,7 +24,4 @@ android {
         minSdkVersion 16
         targetSdkVersion 18
     }
-}
-
-dependencies {
 }

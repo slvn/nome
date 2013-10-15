@@ -13,6 +13,8 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class ApplicationAdapter extends BaseAdapter {
@@ -57,6 +59,9 @@ public class ApplicationAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
         ResolveInfo info = (ResolveInfo) getItem(position);
+        Picasso.with(context)
+                .load(info.getIconResource(), info.activityInfo.applicationInfo.packageName)
+                .into(imageView);
         imageView.setImageDrawable(getIcon(info));
         return imageView;
     }
