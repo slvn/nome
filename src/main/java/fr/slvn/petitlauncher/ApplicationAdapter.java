@@ -62,7 +62,6 @@ public class ApplicationAdapter extends BaseAdapter {
         Picasso.with(context)
                 .load(info.getIconResource(), info.activityInfo.applicationInfo.packageName)
                 .into(imageView);
-        imageView.setImageDrawable(getIcon(info));
         return imageView;
     }
 
