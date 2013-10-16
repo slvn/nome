@@ -1,10 +1,9 @@
 package fr.slvn.petitlauncher;
 
-import android.app.Activity;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -39,11 +38,12 @@ public class Drawer extends Activity {
 
         boolean showWallPaper = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(SettingsActivity.PREF_SHOW_WALLPAPER,
                 SettingsActivity.PREF_SHOW_WALLPAPER_DEFAULT);
+        ActionBar bar = getActionBar();
         if (showWallPaper) {
+            bar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_transparent));
             gridView.setBackground(null);
         } else {
-            ActionBar bar = getActionBar();
-            bar.setBackgroundDrawable(new ColorDrawable(0xFF000000));
+            bar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_solid));
             gridView.setBackgroundResource(android.R.color.background_dark);
         }
     }
