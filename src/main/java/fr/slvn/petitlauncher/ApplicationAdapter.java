@@ -61,6 +61,7 @@ public class ApplicationAdapter extends BaseAdapter {
         ResolveInfo info = (ResolveInfo) getItem(position);
         Picasso.with(context)
                 .load(info.getIconResource(), info.activityInfo.applicationInfo.packageName)
+                .placeholder(R.drawable.ic_placeholder)
                 .into(imageView);
         return imageView;
     }
