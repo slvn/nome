@@ -1,3 +1,5 @@
 <resources>
-    <dimen name="app_icon_size">@android:dimen/app_icon_size</dimen>
+    <dimen name="app_icon_size">48dip</dimen>
+    <dimen name="app_icon_size_with_padding">58dip</dimen>
+    <dimen name="app_icon_padding">5dip</dimen>
 </resources>

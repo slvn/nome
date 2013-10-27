@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -24,11 +25,13 @@ public class ApplicationAdapter extends BaseAdapter {
     private static final String TAG = "ApplicationAdapter";
 
     private Context context;
+    private LayoutInflater inflater;
     private List<ResolveInfo> resolveInfos;
     private int appIconsize;
 
     public ApplicationAdapter(Context context) {
         this.context = context;
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         resolveInfos = context.getPackageManager().queryIntentActivities(intent, 0);
@@ -54,9 +57,7 @@ public class ApplicationAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView;
         if (convertView == null) {
-            imageView = new ImageView(context);
-            imageView.setLayoutParams(new GridView.LayoutParams(appIconsize, appIconsize));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            imageView = (ImageView) inflater.inflate(R.layout.icon, parent, false);
         } else {
             imageView = (ImageView) convertView;
         }
