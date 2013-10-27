@@ -1,5 +1,5 @@
 <resources>
-    <dimen name="app_icon_size">48dip</dimen>
-    <dimen name="app_icon_size_with_padding">58dip</dimen>
-    <dimen name="app_icon_padding">5dip</dimen>
+    <dimen name="app_icon_size">48dp</dimen>
+    <dimen name="app_icon_size_with_padding">52dp</dimen>
+    <dimen name="app_icon_padding">2dp</dimen>
 </resources>
