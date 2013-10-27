@@ -1,11 +1,13 @@
 package fr.slvn.petitlauncher;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,22 +62,22 @@ public class ApplicationAdapter extends BaseAdapter {
         }
         ResolveInfo info = (ResolveInfo) getItem(position);
         Picasso.with(context)
-                .load(info.getIconResource(), info.activityInfo.applicationInfo.packageName)
+                .load(getIconRessourceUri(info))
                 .placeholder(R.drawable.ic_placeholder)
                 .into(imageView);
         return imageView;
     }
 
-    public Drawable getIcon(ResolveInfo info) {
-        try {
-            Resources resources = context.getPackageManager().getResourcesForApplication(info.activityInfo.applicationInfo);
-            int iconId = info.getIconResource();
-            if (iconId != 0) {
-                return resources.getDrawable(iconId);
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, "Cannot find package for " + info, e);
-        }
-        return null;
+    private Uri getIconRessourceUri(ResolveInfo info) {
+        return getResourceUri(info.activityInfo.applicationInfo.packageName,
+                              info.getIconResource());
+    }
+
+    private Uri getResourceUri(String packageName, int resId) {
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme(ContentResolver.SCHEME_ANDROID_RESOURCE);
+        builder.authority(packageName);
+        builder.appendPath(Integer.toString(resId));
+        return builder.build();
     }
 }
