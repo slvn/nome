@@ -12,6 +12,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:persistent="true" >
+
         <activity
             android:name="fr.slvn.petitlauncher.Drawer"
             android:excludeFromRecents="true"
@@ -27,7 +28,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name="fr.slvn.petitlauncher.settings.SettingsActivity" />
+
+        <activity
+            android:name="fr.slvn.petitlauncher.settings.SettingsActivity"
+            android:excludeFromRecents="true"
+            />
+
     </application>
 
 </manifest>
