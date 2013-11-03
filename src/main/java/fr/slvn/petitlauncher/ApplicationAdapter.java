@@ -5,19 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ApplicationAdapter extends BaseAdapter {
@@ -33,8 +30,10 @@ public class ApplicationAdapter extends BaseAdapter {
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
+        PackageManager pm = context.getPackageManager();
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
-        resolveInfos = context.getPackageManager().queryIntentActivities(intent, 0);
+        resolveInfos = pm.queryIntentActivities(intent, 0);
+        Collections.sort(resolveInfos, new ResolveInfo.DisplayNameComparator(pm));
         appIconsize = (int) context.getResources().getDimension(R.dimen.app_icon_size);
     }
 
