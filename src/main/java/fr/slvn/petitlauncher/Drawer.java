@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import fr.slvn.petitlauncher.settings.SettingsActivity;
 
@@ -33,6 +34,16 @@ public class Drawer extends Activity {
                 Intent intent = new Intent();
                 intent.setClassName(info.activityInfo.applicationInfo.packageName, info.activityInfo.name);
                 startActivity(intent);
+            }
+        });
+
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                ResolveInfo info = (ResolveInfo) parent.getItemAtPosition(position);
+                CharSequence name = info.loadLabel(getPackageManager());
+                Toast.makeText(Drawer.this, name, Toast.LENGTH_SHORT).show();
+                return true;
             }
         });
 
