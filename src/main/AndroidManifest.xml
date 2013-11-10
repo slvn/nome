@@ -1,11 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="fr.slvn.petitlauncher"
     android:versionCode="5"
-    android:versionName="0.5b" >
+    android:versionName="1.5b" >
 
     <uses-sdk
         android:minSdkVersion="16"
-        android:targetSdkVersion="18" />
+        android:targetSdkVersion="19" />
 
     <application
         android:allowBackup="false"
@@ -19,6 +19,7 @@
             android:launchMode="singleInstance"
             android:noHistory="true"
             android:stateNotNeeded="true"
+            android:clearTaskOnLaunch="false"
             android:taskAffinity=""
             android:theme="@style/AppTheme" >
             <intent-filter>

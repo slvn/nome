@@ -47,6 +47,7 @@ public class Drawer extends Activity {
             }
         });
 
+        /*
         boolean showWallPaper = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(SettingsActivity.PREF_SHOW_WALLPAPER,
                 SettingsActivity.PREF_SHOW_WALLPAPER_DEFAULT);
         ActionBar bar = getActionBar();
@@ -57,6 +58,7 @@ public class Drawer extends Activity {
             bar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_solid));
             gridView.setBackgroundResource(android.R.color.background_dark);
         }
+        */
     }
 
     @Override
