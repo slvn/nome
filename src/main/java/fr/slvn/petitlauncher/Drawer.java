@@ -4,11 +4,13 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
@@ -47,7 +49,6 @@ public class Drawer extends Activity {
             }
         });
 
-        /*
         boolean showWallPaper = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(SettingsActivity.PREF_SHOW_WALLPAPER,
                 SettingsActivity.PREF_SHOW_WALLPAPER_DEFAULT);
         ActionBar bar = getActionBar();
@@ -57,8 +58,12 @@ public class Drawer extends Activity {
         } else {
             bar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_solid));
             gridView.setBackgroundResource(android.R.color.background_dark);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                getWindow().clearFlags(
+                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION |
+                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            }
         }
-        */
     }
 
     @Override
