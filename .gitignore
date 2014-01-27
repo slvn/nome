@@ -20,5 +20,9 @@ local.properties
 .classpath
 .project
 
+# Android Studio project files
+.gradle/
+.idea/
+
 # Generic files
 *.iml
