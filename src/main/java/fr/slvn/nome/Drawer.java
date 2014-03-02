@@ -1,4 +1,4 @@
-package fr.slvn.petitlauncher;
+package fr.slvn.nome;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -15,7 +15,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import fr.slvn.petitlauncher.settings.SettingsActivity;
+import fr.slvn.nome.settings.SettingsActivity;
 
 public class Drawer extends Activity {
 

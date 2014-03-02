@@ -1,4 +1,4 @@
-android-petit-launcher
+Nöme
 ======================
 
 Minimalistic Launcher for Android

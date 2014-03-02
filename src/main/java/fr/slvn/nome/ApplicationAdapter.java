@@ -1,4 +1,4 @@
-package fr.slvn.petitlauncher;
+package fr.slvn.nome;
 
 import android.content.ContentResolver;
 import android.content.Context;

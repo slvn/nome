@@ -1,10 +1,10 @@
-package fr.slvn.petitlauncher.settings;
+package fr.slvn.nome.settings;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import fr.slvn.petitlauncher.Drawer;
+import fr.slvn.nome.Drawer;
 
 public class SettingsActivity extends Activity {
     public static final String PREF_SHOW_WALLPAPER = "PREF_SHOW_WALLPAPER";

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="fr.slvn.petitlauncher"
-    android:versionCode="5"
-    android:versionName="1.5b" >
+    package="fr.slvn.nome"
+    android:versionCode="1"
+    android:versionName="0.1" >
 
     <uses-sdk
         android:minSdkVersion="16"
@@ -14,7 +14,7 @@
         android:persistent="true" >
 
         <activity
-            android:name="fr.slvn.petitlauncher.Drawer"
+            android:name="fr.slvn.nome.Drawer"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:noHistory="true"
@@ -31,7 +31,7 @@
         </activity>
 
         <activity
-            android:name="fr.slvn.petitlauncher.settings.SettingsActivity"
+            android:name="fr.slvn.nome.settings.SettingsActivity"
             android:excludeFromRecents="true"
             />
 

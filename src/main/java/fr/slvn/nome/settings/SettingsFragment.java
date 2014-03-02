@@ -1,10 +1,10 @@
-package fr.slvn.petitlauncher.settings;
+package fr.slvn.nome.settings;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
-import fr.slvn.petitlauncher.R;
+import fr.slvn.nome.R;
 
 public class SettingsFragment extends PreferenceFragment {
     @Override
