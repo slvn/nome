@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -25,6 +26,8 @@ public class Drawer extends Activity {
 
     private ActionMode actionMode;
 
+    private ResolveInfo currentItem;
+
     private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
@@ -42,10 +45,13 @@ public class Drawer extends Activity {
         public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.action_mode_delete:
+                    uninstallPackage(currentItem.activityInfo.packageName);
                     return true;
                 case R.id.action_mode_store:
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+currentItem.activityInfo.packageName)));
                     return true;
                 case R.id.action_mode_info:
+                    launchPackageInfo(currentItem.activityInfo.packageName);
                     return true;
                 default:
                     return false;
@@ -55,6 +61,7 @@ public class Drawer extends Activity {
         @Override
         public void onDestroyActionMode(ActionMode actionMode) {
             Drawer.this.actionMode = null;
+            currentItem = null;
         }
     };
 
@@ -83,10 +90,10 @@ public class Drawer extends Activity {
                 actionMode = Drawer.this.startActionMode(actionModeCallback);
                 view.setSelected(true);
 
-                ResolveInfo info = (ResolveInfo) parent.getItemAtPosition(position);
-                CharSequence name = "  " + info.loadLabel(getPackageManager());
+                currentItem = (ResolveInfo) parent.getItemAtPosition(position);
+                CharSequence name = "  " + currentItem.loadLabel(getPackageManager());
                 actionMode.setTitle(name);
-                actionMode.setSubtitle("   " + info.activityInfo.applicationInfo.packageName);
+                actionMode.setSubtitle("   " + currentItem.activityInfo.applicationInfo.packageName);
                 return true;
             }
         });
@@ -123,4 +130,18 @@ public class Drawer extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void uninstallPackage(String packageName) {
+        Uri uri = Uri.parse("package:" + packageName);
+        Intent intent = new Intent(Intent.ACTION_UNINSTALL_PACKAGE, uri);
+        startActivity(intent);
+    }
+
+    private void launchPackageInfo(String packageName) {
+        Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.setData(Uri.parse("package:" + packageName));
+        startActivity(intent);
+    }
+
 }
