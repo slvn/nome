@@ -1,7 +1,12 @@
 <resources>
 
+    <style name="ActionModeCloseButton" parent="android:style/Widget.ActionButton.CloseMode">
+        <item name="android:visibility">gone</item>
+    </style>
+
     <!-- Application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo.Wallpaper">
+        <item name="android:actionModeCloseButtonStyle">@style/ActionModeCloseButton</item>
     </style>
 
 </resources>

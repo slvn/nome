@@ -7,7 +7,9 @@ import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.ActionMode;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -20,6 +22,42 @@ import fr.slvn.nome.settings.SettingsActivity;
 public class Drawer extends Activity {
 
     private static final String TAG = "Drawer";
+
+    private ActionMode actionMode;
+
+    private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+            MenuInflater inflater = actionMode.getMenuInflater();
+            inflater.inflate(R.menu.action_mode, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+            switch (menuItem.getItemId()) {
+                case R.id.action_mode_delete:
+                    return true;
+                case R.id.action_mode_store:
+                    return true;
+                case R.id.action_mode_info:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode actionMode) {
+            Drawer.this.actionMode = null;
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +80,13 @@ public class Drawer extends Activity {
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                actionMode = Drawer.this.startActionMode(actionModeCallback);
+                view.setSelected(true);
+
                 ResolveInfo info = (ResolveInfo) parent.getItemAtPosition(position);
-                CharSequence name = info.loadLabel(getPackageManager());
-                Toast.makeText(Drawer.this, name, Toast.LENGTH_SHORT).show();
+                CharSequence name = "  " + info.loadLabel(getPackageManager());
+                actionMode.setTitle(name);
+                actionMode.setSubtitle("   " + info.activityInfo.applicationInfo.packageName);
                 return true;
             }
         });
