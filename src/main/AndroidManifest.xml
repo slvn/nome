@@ -30,6 +30,21 @@
             </intent-filter>
         </activity>
 
+      <activity
+        android:name="fr.slvn.nome.DrawerAssist"
+        android:excludeFromRecents="true"
+        android:launchMode="singleInstance"
+        android:noHistory="true"
+        android:stateNotNeeded="true"
+        android:clearTaskOnLaunch="false"
+        android:taskAffinity=""
+        android:theme="@style/AppTheme">
+        <intent-filter>
+          <action android:name="android.intent.action.ASSIST" />
+          <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
+      </activity>
+
         <activity
             android:name="fr.slvn.nome.settings.SettingsActivity"
             android:excludeFromRecents="true"
