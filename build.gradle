@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    compile files("libs/picasso-2.1.2-SNAPSHOT.jar")
+    compile 'com.squareup.picasso:picasso:2.3.4'
 }
 
 android {
