@@ -17,6 +17,9 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 import fr.slvn.nome.settings.SettingsActivity;
 
 public class Drawer extends Activity {
@@ -115,6 +118,9 @@ public class Drawer extends Activity {
                         WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             }
         }
+
+        DateFormat dateFormat = android.text.format.DateFormat.getLongDateFormat(this);
+        setTitle(dateFormat.format((new Date())));
     }
 
     @Override
