@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import fr.slvn.nome.settings.SettingsActivity;
 
@@ -46,12 +45,15 @@ public class Drawer extends Activity {
             switch (menuItem.getItemId()) {
                 case R.id.action_mode_delete:
                     uninstallPackage(currentItem.activityInfo.packageName);
+                    actionMode.finish();
                     return true;
                 case R.id.action_mode_store:
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+currentItem.activityInfo.packageName)));
+                    actionMode.finish();
                     return true;
                 case R.id.action_mode_info:
                     launchPackageInfo(currentItem.activityInfo.packageName);
+                    actionMode.finish();
                     return true;
                 default:
                     return false;
