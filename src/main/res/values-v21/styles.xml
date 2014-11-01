@@ -1,0 +1,8 @@
+<resources>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="android:Theme.Material.Wallpaper">
+        <item name="android:actionModeCloseButtonStyle">@style/ActionModeCloseButton</item>
+    </style>
+
+</resources>
