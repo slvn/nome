@@ -2,6 +2,8 @@
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="android:Theme.Material.Wallpaper">
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
         <item name="android:actionModeCloseButtonStyle">@style/ActionModeCloseButton</item>
     </style>
 
