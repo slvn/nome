@@ -28,9 +28,7 @@ public class Drawer extends Activity {
 
     private static final String TAG = "Drawer";
 
-    private ActionMode actionMode;
-
-    private ResolveInfo currentItem;
+    private ResolveInfo selectedItemInfo;
 
     private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
         @Override
@@ -49,15 +47,15 @@ public class Drawer extends Activity {
         public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.action_mode_delete:
-                    uninstallPackage(currentItem.activityInfo.packageName);
+                    uninstallPackage(selectedItemInfo.activityInfo.packageName);
                     actionMode.finish();
                     return true;
                 case R.id.action_mode_store:
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+currentItem.activityInfo.packageName)));
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + selectedItemInfo.activityInfo.packageName)));
                     actionMode.finish();
                     return true;
                 case R.id.action_mode_info:
-                    launchPackageInfo(currentItem.activityInfo.packageName);
+                    launchPackageInfo(selectedItemInfo.activityInfo.packageName);
                     actionMode.finish();
                     return true;
                 default:
@@ -67,8 +65,7 @@ public class Drawer extends Activity {
 
         @Override
         public void onDestroyActionMode(ActionMode actionMode) {
-            Drawer.this.actionMode = null;
-            currentItem = null;
+            selectedItemInfo = null;
         }
     };
 
@@ -94,13 +91,13 @@ public class Drawer extends Activity {
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                actionMode = Drawer.this.startActionMode(actionModeCallback);
+                ActionMode actionMode = Drawer.this.startActionMode(actionModeCallback);
                 view.setSelected(true);
 
-                currentItem = (ResolveInfo) parent.getItemAtPosition(position);
-                CharSequence name = "  " + currentItem.loadLabel(getPackageManager());
+                selectedItemInfo = (ResolveInfo) parent.getItemAtPosition(position);
+                CharSequence name = "  " + selectedItemInfo.loadLabel(getPackageManager());
                 actionMode.setTitle(name);
-                actionMode.setSubtitle("   " + currentItem.activityInfo.applicationInfo.packageName);
+                actionMode.setSubtitle("   " + selectedItemInfo.activityInfo.applicationInfo.packageName);
                 return true;
             }
         });
