@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.format.DateFormat;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,8 +18,9 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import fr.slvn.nome.settings.SettingsActivity;
 
@@ -119,8 +121,18 @@ public class Drawer extends Activity {
             }
         }
 
-        DateFormat dateFormat = android.text.format.DateFormat.getLongDateFormat(this);
-        setTitle(dateFormat.format((new Date())));
+       updateDate();
+    }
+
+    private void updateDate() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            final Locale l = Locale.getDefault();
+            final String fmt = DateFormat.getBestDateTimePattern(l, "EEEMMMMd");
+            setTitle(new SimpleDateFormat(fmt, l).format(new Date()));
+        } else {
+            setTitle(DateFormat.format("EEE, MMMM d", new Date()));
+        }
+
     }
 
     @Override
