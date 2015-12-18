@@ -1,0 +1,15 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "21.1.2"
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 23
+    }
+}
+
+dependencies {
+    compile 'com.squareup.picasso:picasso:2.5.2'
+}
