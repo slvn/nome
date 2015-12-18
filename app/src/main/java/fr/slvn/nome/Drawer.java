@@ -87,11 +87,9 @@ public class Drawer extends Activity implements AdapterView.OnItemClickListener,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         boolean showWallPaper = PreferenceManager.getDefaultSharedPreferences(this)
                 .getBoolean(SettingsActivity.PREF_SHOW_WALLPAPER,
                         SettingsActivity.PREF_SHOW_WALLPAPER_DEFAULT);
-
         setTheme(showWallPaper ? R.style.AppTheme : R.style.AppThemeNoWallpaper);
         setContentView(R.layout.drawer);
         ButterKnife.bind(this);
@@ -116,14 +114,7 @@ public class Drawer extends Activity implements AdapterView.OnItemClickListener,
     }
 
     private void updateDate() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            final Locale l = Locale.getDefault();
-            final String fmt = DateFormat.getBestDateTimePattern(l, "EEEMMMMd");
-            setTitle(new SimpleDateFormat(fmt, l).format(new Date()));
-        } else {
-            setTitle(DateFormat.format("EEE, MMMM d", new Date()));
-        }
-
+        setTitle(DateFormat.format("EEE, MMMM d", new Date()));
     }
 
     @Override
