@@ -2,13 +2,8 @@ package fr.slvn.nome;
 
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.LauncherActivityInfo;
-import android.content.pm.LauncherApps;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
-import android.os.UserHandle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,33 +23,27 @@ public class ApplicationAdapter extends BaseAdapter {
 
     private Context context;
     private LayoutInflater inflater;
-    private List<LauncherActivityInfo> launcherActivityInfos;
-    private int appIconsize;
+    private List<LauncherActivityInfo> applications;
 
-    public ApplicationAdapter(Context context, UserHandle user) {
+    public ApplicationAdapter(Context context, List<LauncherActivityInfo> applications) {
         this.context = context;
+        this.applications = applications;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
-        launcherActivityInfos = launcherApps.getActivityList(null, user);
-
-        Collections.sort(launcherActivityInfos, new DisplayNameComparator());
-        appIconsize = (int) context.getResources().getDimension(R.dimen.app_icon_size);
     }
 
     @Override
     public int getCount() {
-        return launcherActivityInfos.size();
+        return applications.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return launcherActivityInfos.get(position);
+        return applications.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return launcherActivityInfos.get(position).hashCode();
+        return applications.get(position).hashCode();
     }
 
     @Override
@@ -86,7 +75,7 @@ public class ApplicationAdapter extends BaseAdapter {
         return builder.build();
     }
 
-    private static class DisplayNameComparator implements Comparator<LauncherActivityInfo> {
+    public static class DisplayNameComparator implements Comparator<LauncherActivityInfo> {
 
         public DisplayNameComparator() {
         }

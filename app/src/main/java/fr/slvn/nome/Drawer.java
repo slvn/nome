@@ -1,34 +1,28 @@
 package fr.slvn.nome;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.LauncherActivityInfo;
-import android.content.pm.ResolveInfo;
-import android.graphics.drawable.ColorDrawable;
+import android.content.pm.LauncherApps;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -38,7 +32,8 @@ public class Drawer extends Activity implements AdapterView.OnItemClickListener,
 
     private static final String TAG = "Drawer";
 
-    private LauncherActivityInfo selectedItemInfo;
+    private LauncherActivityInfo app;
+    private LauncherApps launcher;
 
     @Bind(R.id.drawer_layout) protected DrawerLayout drawerLayout;
     @Bind(R.id.drawer) protected GridView mainDrawer;
@@ -61,15 +56,16 @@ public class Drawer extends Activity implements AdapterView.OnItemClickListener,
         public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.action_mode_delete:
-                    uninstallPackage(selectedItemInfo.getApplicationInfo().packageName);
+                    uninstallPackage(app.getApplicationInfo().packageName);
                     actionMode.finish();
                     return true;
                 case R.id.action_mode_store:
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + selectedItemInfo.getApplicationInfo().packageName)));
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + app.getApplicationInfo().packageName)));
                     actionMode.finish();
                     return true;
                 case R.id.action_mode_info:
-                    launchPackageInfo(selectedItemInfo.getApplicationInfo().packageName);
+                    launcher.startAppDetailsActivity(app.getComponentName(),
+                            app.getUser(), null, null);
                     actionMode.finish();
                     return true;
                 default:
@@ -79,10 +75,9 @@ public class Drawer extends Activity implements AdapterView.OnItemClickListener,
 
         @Override
         public void onDestroyActionMode(ActionMode actionMode) {
-            selectedItemInfo = null;
+            app = null;
         }
     };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,23 +89,29 @@ public class Drawer extends Activity implements AdapterView.OnItemClickListener,
         setContentView(R.layout.drawer);
         ButterKnife.bind(this);
 
+        launcher = (LauncherApps) getSystemService(Context.LAUNCHER_APPS_SERVICE);
+
         UserManager um = (UserManager) getSystemService(USER_SERVICE);
-        List<UserHandle> userHandles = um.getUserProfiles();
-        if (userHandles.size() > 1) {
+        List<UserHandle> users = um.getUserProfiles();
+        if (users.size() > 1) {
             // Oh, managed profiles, nice.
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, rightDrawer);
-            rightDrawer.setAdapter(new ApplicationAdapter(this, userHandles.get(1)));
+            rightDrawer.setAdapter(getApplicationAdapter(users.get(1)));
             rightDrawer.setOnItemClickListener(this);
             rightDrawer.setOnItemLongClickListener(this);
         } else {
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, rightDrawer);
         }
-
-        mainDrawer.setAdapter(new ApplicationAdapter(this, userHandles.get(0)));
+        mainDrawer.setAdapter(getApplicationAdapter(users.get(0)));
         mainDrawer.setOnItemClickListener(this);
         mainDrawer.setOnItemLongClickListener(this);
-
         updateDate();
+    }
+
+    private ApplicationAdapter getApplicationAdapter(UserHandle user) {
+        List<LauncherActivityInfo> apps = launcher.getActivityList(null, user);
+        Collections.sort(apps, new ApplicationAdapter.DisplayNameComparator());
+        return new ApplicationAdapter(this, apps);
     }
 
     private void updateDate() {
@@ -139,20 +140,11 @@ public class Drawer extends Activity implements AdapterView.OnItemClickListener,
         startActivity(intent);
     }
 
-    private void launchPackageInfo(String packageName) {
-        Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        intent.addCategory(Intent.CATEGORY_DEFAULT);
-        intent.setData(Uri.parse("package:" + packageName));
-        startActivity(intent);
-    }
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         LauncherActivityInfo info = (LauncherActivityInfo) parent.getItemAtPosition(position);
-        ComponentName activity = info.getComponentName();
-        Intent intent = new Intent();
-        intent.setClassName(activity.getPackageName(), activity.getClassName());
-        startActivity(intent);
+        launcher.startMainActivity(info.getComponentName(),
+                info.getUser(), view.getClipBounds(), null);
     }
 
     @Override
@@ -165,10 +157,9 @@ public class Drawer extends Activity implements AdapterView.OnItemClickListener,
 
         view.setSelected(true);
 
-        selectedItemInfo = (LauncherActivityInfo) parent.getItemAtPosition(position);
-        CharSequence name = "  " + selectedItemInfo.getLabel();
-        actionMode.setTitle(name);
-        actionMode.setSubtitle("   " + selectedItemInfo.getApplicationInfo().packageName);
+        app = (LauncherActivityInfo) parent.getItemAtPosition(position);
+        actionMode.setTitle("  " + app.getLabel());
+        actionMode.setSubtitle("   " + app.getApplicationInfo().packageName);
         return true;
     }
 }
