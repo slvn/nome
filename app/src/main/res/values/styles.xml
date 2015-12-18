@@ -11,4 +11,8 @@
         <item name="android:actionModeCloseButtonStyle">@style/ActionModeCloseButton</item>
     </style>
 
+    <style name="AppThemeNoWallpaper" parent="android:Theme.Material">
+        <item name="android:actionModeCloseButtonStyle">@style/ActionModeCloseButton</item>
+    </style>
+
 </resources>

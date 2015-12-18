@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.LauncherActivityInfo;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -86,6 +87,12 @@ public class Drawer extends Activity implements AdapterView.OnItemClickListener,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        boolean showWallPaper = PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean(SettingsActivity.PREF_SHOW_WALLPAPER,
+                        SettingsActivity.PREF_SHOW_WALLPAPER_DEFAULT);
+
+        setTheme(showWallPaper ? R.style.AppTheme : R.style.AppThemeNoWallpaper);
         setContentView(R.layout.drawer);
         ButterKnife.bind(this);
 
@@ -104,22 +111,6 @@ public class Drawer extends Activity implements AdapterView.OnItemClickListener,
         mainDrawer.setAdapter(new ApplicationAdapter(this, userHandles.get(0)));
         mainDrawer.setOnItemClickListener(this);
         mainDrawer.setOnItemLongClickListener(this);
-
-        boolean showWallPaper = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(SettingsActivity.PREF_SHOW_WALLPAPER,
-                SettingsActivity.PREF_SHOW_WALLPAPER_DEFAULT);
-        ActionBar bar = getActionBar();
-        if (showWallPaper) {
-            bar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_transparent));
-            mainDrawer.setBackground(null);
-        } else {
-            bar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_solid));
-            mainDrawer.setBackgroundResource(android.R.color.background_dark);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                getWindow().clearFlags(
-                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION |
-                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            }
-        }
 
         updateDate();
     }
