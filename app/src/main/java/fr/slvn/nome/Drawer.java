@@ -2,13 +2,19 @@ package fr.slvn.nome;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.LauncherActivityInfo;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.UserHandle;
+import android.os.UserManager;
 import android.preference.PreferenceManager;
+import android.support.v4.widget.DrawerLayout;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,15 +26,22 @@ import android.widget.GridView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import fr.slvn.nome.settings.SettingsActivity;
 
-public class Drawer extends Activity {
+public class Drawer extends Activity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     private static final String TAG = "Drawer";
 
-    private ResolveInfo selectedItemInfo;
+    private LauncherActivityInfo selectedItemInfo;
+
+    @Bind(R.id.drawer_layout) protected DrawerLayout drawerLayout;
+    @Bind(R.id.drawer) protected GridView mainDrawer;
+    @Bind(R.id.drawer_right) protected GridView rightDrawer;
 
     private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
         @Override
@@ -47,15 +60,15 @@ public class Drawer extends Activity {
         public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.action_mode_delete:
-                    uninstallPackage(selectedItemInfo.activityInfo.packageName);
+                    uninstallPackage(selectedItemInfo.getApplicationInfo().packageName);
                     actionMode.finish();
                     return true;
                 case R.id.action_mode_store:
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + selectedItemInfo.activityInfo.packageName)));
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + selectedItemInfo.getApplicationInfo().packageName)));
                     actionMode.finish();
                     return true;
                 case R.id.action_mode_info:
-                    launchPackageInfo(selectedItemInfo.activityInfo.packageName);
+                    launchPackageInfo(selectedItemInfo.getApplicationInfo().packageName);
                     actionMode.finish();
                     return true;
                 default:
@@ -74,43 +87,33 @@ public class Drawer extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer);
+        ButterKnife.bind(this);
 
-        GridView gridView = (GridView) findViewById(R.id.drawer);
-        gridView.setAdapter(new ApplicationAdapter(this));
+        UserManager um = (UserManager) getSystemService(USER_SERVICE);
+        List<UserHandle> userHandles = um.getUserProfiles();
+        if (userHandles.size() > 1) {
+            // Oh, managed profiles, nice.
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, rightDrawer);
+            rightDrawer.setAdapter(new ApplicationAdapter(this, userHandles.get(1)));
+            rightDrawer.setOnItemClickListener(this);
+            rightDrawer.setOnItemLongClickListener(this);
+        } else {
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, rightDrawer);
+        }
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ResolveInfo info = (ResolveInfo) parent.getItemAtPosition(position);
-                Intent intent = new Intent();
-                intent.setClassName(info.activityInfo.applicationInfo.packageName, info.activityInfo.name);
-                startActivity(intent);
-            }
-        });
-
-        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                ActionMode actionMode = Drawer.this.startActionMode(actionModeCallback);
-                view.setSelected(true);
-
-                selectedItemInfo = (ResolveInfo) parent.getItemAtPosition(position);
-                CharSequence name = "  " + selectedItemInfo.loadLabel(getPackageManager());
-                actionMode.setTitle(name);
-                actionMode.setSubtitle("   " + selectedItemInfo.activityInfo.applicationInfo.packageName);
-                return true;
-            }
-        });
+        mainDrawer.setAdapter(new ApplicationAdapter(this, userHandles.get(0)));
+        mainDrawer.setOnItemClickListener(this);
+        mainDrawer.setOnItemLongClickListener(this);
 
         boolean showWallPaper = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(SettingsActivity.PREF_SHOW_WALLPAPER,
                 SettingsActivity.PREF_SHOW_WALLPAPER_DEFAULT);
         ActionBar bar = getActionBar();
         if (showWallPaper) {
             bar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_transparent));
-            gridView.setBackground(null);
+            mainDrawer.setBackground(null);
         } else {
             bar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_solid));
-            gridView.setBackgroundResource(android.R.color.background_dark);
+            mainDrawer.setBackgroundResource(android.R.color.background_dark);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 getWindow().clearFlags(
                         WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION |
@@ -118,7 +121,7 @@ public class Drawer extends Activity {
             }
         }
 
-       updateDate();
+        updateDate();
     }
 
     private void updateDate() {
@@ -161,4 +164,29 @@ public class Drawer extends Activity {
         startActivity(intent);
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        LauncherActivityInfo info = (LauncherActivityInfo) parent.getItemAtPosition(position);
+        ComponentName activity = info.getComponentName();
+        Intent intent = new Intent();
+        intent.setClassName(activity.getPackageName(), activity.getClassName());
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        ActionMode actionMode = Drawer.this.startActionMode(actionModeCallback);
+
+        if (actionMode == null) {
+            return false;
+        }
+
+        view.setSelected(true);
+
+        selectedItemInfo = (LauncherActivityInfo) parent.getItemAtPosition(position);
+        CharSequence name = "  " + selectedItemInfo.getLabel();
+        actionMode.setTitle(name);
+        actionMode.setSubtitle("   " + selectedItemInfo.getApplicationInfo().packageName);
+        return true;
+    }
 }
