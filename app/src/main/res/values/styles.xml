@@ -1,5 +1,4 @@
 <resources>
-
     <style name="ActionModeCloseButton" parent="android:style/Widget.ActionButton.CloseMode">
         <item name="android:visibility">gone</item>
     </style>
@@ -7,12 +6,11 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="android:Theme.Material.Wallpaper">
         <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
+
         <item name="android:actionModeCloseButtonStyle">@style/ActionModeCloseButton</item>
     </style>
 
     <style name="AppThemeNoWallpaper" parent="android:Theme.Material">
         <item name="android:actionModeCloseButtonStyle">@style/ActionModeCloseButton</item>
     </style>
-
 </resources>
